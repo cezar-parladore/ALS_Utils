@@ -27,19 +27,18 @@ class ALS_file:
             self.worksheets[key] = pd.read_excel(
                 self.path_to_file, sheet_name=key, skiprows=self.skip_rows
             )
+        self.als_grupo = self.worksheets["Cliente"].iat[1,1]
 
 
     def check_qaqc(self):
         qaqc_ws = self.worksheets["QAQC"]
         return qaqc_ws
 
-fjfiej
+    def fix_worksheets(self)
+
 
 xlsx_files = [ALS_file(xlsx) for xlsx in input_files_path]
-xlsx_files[0].worksheets["Resultados"]
+xlsx_files[4].als_grupo
 
-arquivo.get_worksheets()
-arquivo.check_qaqc()
 
-# ANCHOR - def check_qaqc
-# ANCHOR - def to RESUMO
+
