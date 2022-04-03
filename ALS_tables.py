@@ -19,14 +19,8 @@ class ALS_file:
             "Dil":''
         }
 
-
-    def __str__(self) -> str:
-        return self.file_name
-
-
     def get_worksheets(self, tables_only:bool=True):
         for key in self.worksheets.keys():
-            print(key)
             if tables_only:
                 self.worksheets[key] = pd.read_excel(
                     self.path_to_file,
@@ -44,7 +38,8 @@ class ALS_file:
         qaqc_ws = self.worksheets['QAQC']
         return qaqc_ws
 
-arquivo = ALS_file()
+xlsx_files = [ALS_file(xlsx).get_worksheets() for xlsx in input_files_path]
+
 arquivo.get_worksheets()
 arquivo.check_qaqc()
 
