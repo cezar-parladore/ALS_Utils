@@ -33,7 +33,7 @@ class ALS_file:
         qaqc_ws = self.worksheets["QAQC"]
         return qaqc_ws
 
-
+fjfiej
 
 xlsx_files = [ALS_file(xlsx) for xlsx in input_files_path]
 xlsx_files[0].worksheets["Resultados"]
