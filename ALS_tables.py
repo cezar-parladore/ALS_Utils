@@ -4,45 +4,41 @@ from glob import glob
 import easygui
 
 input_folder = easygui.diropenbox()
-input_files_path = glob(input_folder+"/*.xlsx")
+input_files_path = glob(input_folder + "/*.xlsx")
+
+
 class ALS_file:
     # TODO path must be mandatory
-    def __init__(self, path_to_file: str) -> None:
+    def __init__(self, path_to_file: str, skip_blank_rows: bool = True) -> None:
         self.path_to_file = path_to_file
+        self.skip_rows = 9
+        if not skip_blank_rows:
+            self.skip_rows = 0
         self.file_name = path_to_file.split("/")[-1].replace(".xlsx", "")
         self.worksheets = {
-            "Cliente":'',
-            "Coleta":'',
-            "Metodos":'',
-            "Resultados":'',
-            "QAQC":'',
-            "Dil":''
+            "Cliente": "",
+            "Coleta": "",
+            "Metodos": "",
+            "Resultados": "",
+            "QAQC": "",
+            "Dil": "",
         }
-
-    def get_worksheets(self, tables_only:bool=True):
         for key in self.worksheets.keys():
-            if tables_only:
-                self.worksheets[key] = pd.read_excel(
-                    self.path_to_file,
-                    sheet_name=key,
-                    skiprows=9
-                )
-            else:
-                self.worksheets[key] = pd.read_excel(
-                    self.path_to_file,
-                    sheet_name=key
-                )
+            self.worksheets[key] = pd.read_excel(
+                self.path_to_file, sheet_name=key, skiprows=self.skip_rows
+            )
 
-            #TODO implemment check if is corrupt; then call fix corrupt xls
+
     def check_qaqc(self):
-        qaqc_ws = self.worksheets['QAQC']
+        qaqc_ws = self.worksheets["QAQC"]
         return qaqc_ws
 
-xlsx_files = [ALS_file(xlsx).get_worksheets() for xlsx in input_files_path]
+
+xlsx_files = [ALS_file(xlsx) for xlsx in input_files_path]
+xlsx_files[0].worksheets["Cliente"]
 
 arquivo.get_worksheets()
 arquivo.check_qaqc()
 
-    #ANCHOR - def check_qaqc
-    #ANCHOR - def to RESUMO
-
+# ANCHOR - def check_qaqc
+# ANCHOR - def to RESUMO
