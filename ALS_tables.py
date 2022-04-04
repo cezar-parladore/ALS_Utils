@@ -1,3 +1,4 @@
+from email import header
 import pandas as pd
 import os
 from glob import glob
@@ -25,20 +26,20 @@ class ALS_file:
         for key in self.worksheets.keys():
             #FIXME raise error if corrupt, then call function to convert corrupt xls to xlsx
             self.worksheets[key] = pd.read_excel(
-                self.path_to_file, sheet_name=key, skiprows=self.skip_rows
+                self.path_to_file, sheet_name=key, skiprows=self.skip_rows, header=None
             )
         self.als_grupo = self.worksheets["Cliente"].iat[1,1]
 
 
     def check_qaqc(self):
-        qaqc_ws = self.worksheets["QAQC"]
+        qaqc = self.worksheets["QAQC"]
         return qaqc_ws
 
-    def fix_worksheets(self)
+    def fix_worksheets(self):
 
 
 xlsx_files = [ALS_file(xlsx) for xlsx in input_files_path]
-xlsx_files[4].als_grupo
+xlsx_files[4].worksheets["QAQC"].isnull().any(1)
 
 
-
+pd.DataFrame().any()
