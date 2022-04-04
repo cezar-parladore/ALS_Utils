@@ -32,14 +32,24 @@ class ALS_file:
 
 
     def check_qaqc(self):
-        qaqc = self.worksheets["QAQC"]
-        return qaqc_ws
+        _ = self.worksheets["QAQC"]
+        _ = _.dropna(axis=0,how='all')
+        type_rows = _.loc[:,1:].isna().all(1)
+        types = _[[0]].loc[type_rows][0].tolist()
+        return types
 
-    def fix_worksheets(self):
+    # def fix_worksheets(self):
 
 
 xlsx_files = [ALS_file(xlsx) for xlsx in input_files_path]
-xlsx_files[4].worksheets["QAQC"].isnull().any(1)
+for file in xlsx_files:
+    file.check_qaqc()
 
+
+file.dropna(axis=0,how='all',inplace=True)
+linhas = file.loc[:,1:].isna().all(1)
+types = file[[0]].loc[linhas][0].tolist()
+
+file.pipe(pd.DataFrame.dropna, {'axis':0, 'how':'all'})
 
 pd.DataFrame().any()
