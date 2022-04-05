@@ -45,4 +45,50 @@ class ALS_file:
         return _    
     # def fix_worksheets(self):
 
-    
+    def fMetodos(self):
+        _ = self.worksheets["Metodos"]
+        _.loc[0][0] = 'Ref'
+        _ = _.rename(columns=_.iloc[0]).drop(_.index[0])
+        _.dropna(axis=1, how='all', inplace=True)
+        
+        return _
+
+    def fResultados(df, grupo_de_amostras):
+        _ = df
+        grupo = grupo_de_amostras
+        # grupo = _.loc[0][0].split(': ')[1]
+        _ = (_.drop([0], axis=0)
+        .reset_index(drop=True)
+        .transpose()
+        .fillna("")
+        )
+
+        _[6] = _[0]+';'+_[1]+';'+_[2]+';'+_[3]+';'+_[4]+';'+_[5]
+
+        _ = (_.transpose()
+        .drop([0, 1, 2, 3, 4, 5])
+        .reset_index(drop=True)
+        )
+
+        _.loc[0,1:3] = _.loc[0,1:3].str.replace(';','')
+        _ = _.drop(labels=4,axis=1)
+        _.loc[0][0] = 'Método de Análise'
+
+        _ = _.rename(columns=_.iloc[0]).drop(_.index[0]).reset_index(drop=True)
+
+        _ = _[_['Parâmetro']!='']
+        _ = _.melt(id_vars=['Método de Análise','Parâmetro','Unidade','CAS'],
+            var_name='melt',
+            value_name='Resultado'
+            )
+
+        new_cols = _['melt'].str.split(';',expand=True).drop(labels=5,axis=1)
+        new_cols.columns = ['lab_sample_id','Data de Coleta','Hora de Coleta','Matriz','Amostra']
+
+        _ = pd.concat([_[['Método de Análise','Parâmetro','Unidade','CAS','Resultado']], new_cols], axis=1)
+        
+        _['Boletim'] = _['lab_sample_id'].str.split('-').str[0]
+        _['Grupo de Amostras'] = grupo
+        print(_['Grupo de Amostras'].unique())
+        
+        return _
