@@ -91,6 +91,32 @@ class ALS_file:
         _['Grupo de Amostras'] = grupo
         
         return _
+    
+    def fDil(self):
+        _ = self.worksheets["Dil"]
+
+        _ = _.rename(columns=_.iloc[0]).drop(_.index[0]).reset_index(drop=True)
+
+        new_cols = _['Amostras'].str.split(';', expand=True).replace({None:''})
+        _ = pd.concat([_, new_cols], axis=1).drop(columns='Amostras').rename(columns={'Parâmeto':'Parâmetro'})
+    
+        _ = pd.melt(_,
+            id_vars=['Método de Análise','Parâmetro','Diluição'],
+            var_name='melt',
+            value_name='Boletim')
+
+        _ = _[_['Boletim'] != ''].drop(columns=['melt'])
+        _['Boletim'] = _['Boletim'].astype('str').str.replace('-','/')
+        _['Parâmetro'] = _['Parâmetro'].str.split('@').str[1]
+
+        return _
+
+    # def fQaqc(self):
+
+
+
+
+
 
 files = [ALS_file(path) for path in input_files_path]
 files[1].fResultados()
