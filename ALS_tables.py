@@ -53,9 +53,9 @@ class ALS_file:
         
         return _
 
-    def fResultados(df, grupo_de_amostras):
-        _ = df
-        grupo = grupo_de_amostras
+    def fResultados(self):
+        _ = self.worksheets["Resultados"]
+        grupo = self.als_grupo
         # grupo = _.loc[0][0].split(': ')[1]
         _ = (_.drop([0], axis=0)
         .reset_index(drop=True)
@@ -89,6 +89,9 @@ class ALS_file:
         
         _['Boletim'] = _['lab_sample_id'].str.split('-').str[0]
         _['Grupo de Amostras'] = grupo
-        print(_['Grupo de Amostras'].unique())
         
         return _
+
+files = [ALS_file(path) for path in input_files_path]
+files[1].fResultados()
+files[1].worksheets["Resultados"]
