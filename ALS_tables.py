@@ -1,4 +1,3 @@
-from email import header
 import pandas as pd
 import os
 from glob import glob
@@ -38,18 +37,12 @@ class ALS_file:
         types = _[[0]].loc[type_rows][0].tolist()
         return types
 
+    def fColeta(self):
+        _ = self.worksheets["Coleta"]
+        _ = _.rename(columns=_.iloc[0]).drop(_.index[0]).reset_index(drop=True)
+        _ = _.drop(columns=['Tipo de Amostra'])
+        
+        return _    
     # def fix_worksheets(self):
 
-
-xlsx_files = [ALS_file(xlsx) for xlsx in input_files_path]
-for file in xlsx_files:
-    file.check_qaqc()
-
-
-file.dropna(axis=0,how='all',inplace=True)
-linhas = file.loc[:,1:].isna().all(1)
-types = file[[0]].loc[linhas][0].tolist()
-
-file.pipe(pd.DataFrame.dropna, {'axis':0, 'how':'all'})
-
-pd.DataFrame().any()
+    
